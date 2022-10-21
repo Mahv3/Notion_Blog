@@ -7,6 +7,7 @@ import styles from "./index.module.css";
 export const databaseId = process.env.NOTION_DATABASE_ID;
 
 export default function Home({ posts }) {
+  console.log(posts);
   return (
     <div>
       <Head>
@@ -49,7 +50,7 @@ export default function Home({ posts }) {
           </div>
           <h1>Next.js + Notion API ブログ</h1>
           <p>
-           Notionと連携しているブログです。Notionに書き込めばそのままブログとして投稿できます。
+            Notionと連携しているブログです。Notionに書き込めばそのままブログとして投稿できます。
           </p>
         </header>
 
@@ -87,5 +88,13 @@ export default function Home({ posts }) {
   );
 }
 
-//SSGを追加
-
+//ISRを追加
+export const getStaticProps = async () => {
+  const database = await getDatabase(databaseId);
+  return {
+    props: {
+      posts: database,
+    },
+    revalidate: 1,
+  };
+};
